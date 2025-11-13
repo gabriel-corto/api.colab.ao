@@ -1,0 +1,50 @@
+# Node modules
+/node_modules
+
+# npm package lock
+/package-lock.json
+
+# Yarn lock
+/yarn.lock
+
+# Environment files
+.env
+.env.*.local
+
+# Build output
+/dist
+/.next
+/.nuxt
+/out
+
+# TypeScript configuration files
+/tsconfig.json
+/tsconfig.build.json
+
+# Logs
+*.log
+*.log.*
+
+# IDE or editor directories and files
+.vscode/
+.idea/
+
+# Operating system specific files
+.DS_Store
+Thumbs.db
+
+# Next.js (if using)
+/.next/
+
+# Tye (if using)
+.tye/
+
+# SvelteKit (if using)
+/.svelte-kit/
+
+# Jest coverage
+/coverage/
+
+# Other dependencies
+*.tgz
+*.swp
