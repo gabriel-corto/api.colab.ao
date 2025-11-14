@@ -1,21 +1,21 @@
-import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
+import { IS_PUBLIC_KEY } from "@/common/decorators/public.decorator";
 import {
   CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
-import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { Reflector } from "@nestjs/core";
+import { JwtService } from "@nestjs/jwt";
 
-import { AppRequest, TokenPayload } from '@/types/global';
+import { AppRequest, TokenPayload } from "@/types/global";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private jwt: JwtService,
-    private reflector: Reflector,
+    private reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -30,10 +30,10 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = (req.cookies?.authToken ||
-      req.headers.authorization?.replace('Bearer ', '')) as string;
+      req.headers.authorization?.replace("Bearer ", "")) as string;
 
     if (!token) {
-      throw new UnauthorizedException('Unauthorized');
+      throw new UnauthorizedException("Unauthorized");
     }
 
     try {
@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch {
-      throw new UnauthorizedException('Unauthorized');
+      throw new UnauthorizedException("Unauthorized");
     }
   }
 }

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { UsersService } from '@/modules/users/users.service';
-import { PrismaService } from '@/services/database/prisma.service';
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UsersService } from "@/modules/users/users.service";
+import { PrismaService } from "@/services/database/prisma.service";
+
+import { CreateProfileDto } from "./dto/create-profile.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 
 @Injectable()
 export class ProfileService {
@@ -16,9 +17,8 @@ export class ProfileService {
     return await this.user.getProfile(id);
   }
 
-  async create(data: CreateProfileDto) {
+  async create(data: CreateProfileDto, userId: string) {
     const { avatar, biography } = data;
-    const userId = '01K944RBE0JJJ001RCN01B01J5';
 
     return await this.prisma.profile.create({
       data: {
@@ -29,9 +29,8 @@ export class ProfileService {
     });
   }
 
-  async update(data: UpdateProfileDto) {
+  async update(data: UpdateProfileDto, userId: string) {
     const { avatar, biography } = data;
-    const userId = '01K944RBE0JJJ001RCN01B01J5';
 
     return await this.prisma.profile.update({
       data: {

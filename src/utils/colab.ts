@@ -1,12 +1,12 @@
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 export class Colab {
   generateId(name: string) {
-    const generated = `${name}-${nanoid(5)}`;
+    const generated = `${name}-${nanoid(3)}`;
     return generated
       .toLowerCase()
       .trim()
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
   }
 }

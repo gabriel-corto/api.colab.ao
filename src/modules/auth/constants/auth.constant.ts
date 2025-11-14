@@ -7,4 +7,4 @@ export const JWT_CONFIG = {
     expiresIn: '1d',
     maxAge: 24 * 60 * 60 * 1000,
   },
-} as const;
+} as const

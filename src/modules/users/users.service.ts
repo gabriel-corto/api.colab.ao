@@ -2,14 +2,15 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
-import { PrismaService } from '@/services/database/prisma.service';
+import { PrismaService } from "@/services/database/prisma.service";
 
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from "./dto/create-user.dto";
 
-import { Colab } from '@/utils/colab';
-import bcrypt from 'bcrypt';
+import { Colab } from "@/utils/colab";
+import bcrypt from "bcrypt";
+import { QueryParamsDto } from "./dto/params.dto";
 
 @Injectable()
 export class UsersService {
@@ -18,10 +19,18 @@ export class UsersService {
     private colab: Colab,
   ) {}
 
-  async findAll() {
+  async findAll(query?: QueryParamsDto) {
     return await this.prisma.user.findMany({
       omit: {
         password: true,
+      },
+      where: {
+        id: query?.id,
+        email: {
+          contains: query?.email,
+        },
+        accountType: query?.accountType,
+        colabId: query?.colabId,
       },
     });
   }
@@ -45,7 +54,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado!');
+      throw new NotFoundException("Usuário não encontrado!");
     }
 
     return user;
@@ -67,6 +76,8 @@ export class UsersService {
           omit: {
             id: true,
             userId: true,
+            createdAt: true,
+            updatedAt: true,
           },
         },
       },
@@ -74,16 +85,14 @@ export class UsersService {
   }
 
   private async passwordHash(password: string) {
-    const hash = await bcrypt.hash(password, 6);
-
-    return hash;
+    return await bcrypt.hash(password, 6);
   }
 
   async create(data: CreateUserDto) {
     const user = await this.findByEmail(data.email);
 
     if (user) {
-      throw new ConflictException('Este e-mail já está sendo usado!');
+      throw new ConflictException("Este e-mail já está sendo usado!");
     }
 
     const { name, email, accountType, password } = data;

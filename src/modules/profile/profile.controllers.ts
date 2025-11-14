@@ -1,15 +1,15 @@
-import type { ApiSuccessResponse, AppRequest } from '@/types/global';
-import { Body, Controller, Get, Patch, Post, Req } from '@nestjs/common';
+import type { ApiSuccessResponse, AppRequest } from "@/types/global";
+import { Body, Controller, Get, Patch, Post, Req } from "@nestjs/common";
 
-import { CreateProfileDto } from './dto/create-profile.dto';
-import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ProfileService } from './profile.service';
+import { CreateProfileDto } from "./dto/create-profile.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
+import { ProfileService } from "./profile.service";
 
-@Controller('profile')
+@Controller("profile")
 export class ProfileController {
   constructor(private profile: ProfileService) {}
 
-  @Get('/me')
+  @Get("/me")
   async getProfile(@Req() req: AppRequest) {
     const userId = req.token?.user.id as string;
     const profile = await this.profile.getProfile(userId);
@@ -20,22 +20,30 @@ export class ProfileController {
   }
 
   @Post()
-  async create(@Body() body: CreateProfileDto): Promise<ApiSuccessResponse> {
-    const profile = await this.profile.create(body);
+  async create(
+    @Body() body: CreateProfileDto,
+    @Req() req: AppRequest,
+  ): Promise<ApiSuccessResponse> {
+    const userId = req.token?.user.id as string;
+    const profile = await this.profile.create(body, userId);
 
     return {
       data: profile,
-      message: 'Dados de perfil actualizado com sucesso!',
+      message: "Dados de perfil actualizado com sucesso!",
     };
   }
 
   @Patch()
-  async update(@Body() body: UpdateProfileDto): Promise<ApiSuccessResponse> {
-    const profile = await this.profile.update(body);
+  async update(
+    @Body() body: UpdateProfileDto,
+    @Req() req: AppRequest,
+  ): Promise<ApiSuccessResponse> {
+    const userId = req.token?.user.id as string;
+    const profile = await this.profile.update(body, userId);
 
     return {
       data: profile,
-      message: 'Perfil actualizado com sucesso!',
+      message: "Perfil actualizado com sucesso!",
     };
   }
 }
