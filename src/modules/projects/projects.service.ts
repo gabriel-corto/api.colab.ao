@@ -30,7 +30,17 @@ export class ProjectService {
   }
 
   async findAll() {
-    return await this.prisma.project.findMany();
+    return await this.prisma.project.findMany({
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            accountType: true,
+          },
+        },
+      },
+    });
   }
 
   async findUserProjects(ownerId: string) {
@@ -40,6 +50,15 @@ export class ProjectService {
       },
       omit: {
         ownerId: true,
+      },
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+            accountType: true,
+          },
+        },
       },
     });
   }
@@ -55,6 +74,34 @@ export class ProjectService {
         name: true,
       },
     });
+  }
+
+  async findBySlug(slug: string, ownerId: string) {
+    const project = await this.prisma.project.findFirst({
+      where: {
+        slug,
+        AND: {
+          ownerId,
+        },
+      },
+      omit: {
+        ownerId: true,
+      },
+      include: {
+        owner: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      throw new NotFoundException("Projecto não encontrado!");
+    }
+
+    return project;
   }
 
   async delete(id: string, ownerId: string) {

@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 //API RESPONSES
 export interface ApiSuccessResponse {
@@ -33,7 +33,7 @@ export interface TokenPayload {
 
 export interface TokenOptions {
   payload: TokenPayload;
-  type: 'access' | 'refresh';
+  type: "access" | "refresh";
 }
 
 export interface AppRequest extends Request {

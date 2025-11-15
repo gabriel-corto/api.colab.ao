@@ -1,4 +1,4 @@
-import type { ApiPageDataResponse, AppRequest } from "@/types/global";
+import type { ApiPageDataResponse, ApiSuccessResponse, AppRequest } from "@/types/global";
 import { Body, Controller, Delete, Get, Param, Post, Req } from "@nestjs/common";
 
 import { ProjectService } from "./projects.service";
@@ -40,6 +40,20 @@ export class ProjectsController {
     };
   }
 
+  @Get(":slug")
+  async getProjectDetails(
+    @Req() req: AppRequest,
+    @Param() param: { slug: string },
+  ): Promise<ApiSuccessResponse> {
+    const ownerId = req.token?.user.id as string;
+    const slug = param.slug;
+    const project = await this.project.findBySlug(slug, ownerId);
+
+    return {
+      data: project,
+    };
+  }
+
   @Post()
   async create(@Body() body: CreateProjectDto, @Req() req: AppRequest) {
     const ownerId = req.token?.user.id as string;
@@ -57,7 +71,7 @@ export class ProjectsController {
     await this.project.delete(param.id, ownerId);
 
     return {
-      message: "Projecto excluído com sucesso!",
+      message: "Projecto Excluído com sucesso!",
     };
   }
 }
